@@ -7,6 +7,8 @@ Created on Fri Nov 06 14:29:21 2015
 
 from __future__ import division
 from pylab import*
+from scipy.integrate import quad
+from scipy.integrate import simps
 
 interactive(True)
 close('all')
@@ -28,27 +30,42 @@ while(abs(err)>ermin):
 
 bbp=pas
 
-figure('BBP')
+figure('BBP:'+ str(bbp))
 plot(itera, error)
 
 
 iteraRandom=array([])
 errRandom=array([])
-
-for i in range(0,10000,10):
-    dades=random_sample([i,2])-0.5
-    interns=0
-    for j in range(i):
-        x,y=dades[j,:]
-        if(sqrt((x*x+y*y))<=1/2):interns+=1
+interns=0
+for i in range(0,10000):
+    dades=2*random_sample([2])-1
+    #interns=0
+    if(sqrt(((dades[0]*dades[0])+(dades[1]*dades[1])))<=1):interns+=1
     iterac=i+1
     iteraRandom=append(iteraRandom, iterac)
-    quoc=interns/iterac
-    print quoc
+    quoc=interns/iterac*4
+    #print quoc
     err=pi-quoc
     errRandom=append(errRandom, err)
 
 randomPi=quoc
 
-figure('Random')
+figure('Random:'+ str(randomPi))
 plot(iteraRandom, errRandom)
+
+
+f1=lambda x: exp(-(x*x))
+f2=lambda x: 1/(1-(x*x))
+
+quad1, errq1=quad(f1, -inf, inf)
+quad1Pi=quad1*quad1
+quad2, errq2=quad(f2, 0.0001, inf)
+quad2Pi=2*quad2
+
+x=linspace(0.000001, 10000, 100000)
+y1=exp(-(x*x))
+y2=1/(1-(x*x))
+simps1=simps(y1)
+simps1Pi=2*simps1*simps1
+simps2=simps(y2)
+simp2Pi=2*simps2
