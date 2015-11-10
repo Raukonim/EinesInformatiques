@@ -11,7 +11,8 @@ from pylab import*
 interactive(True)
 close('all')
 
-M=100
+M=1000
+top=2
 z=zeros([M,M])
 re=linspace(-2,1,M)
 im=linspace(-1.5,1.5,M)
@@ -26,21 +27,27 @@ for i in range(0,90,10):
     j=1+i/10
     #print j
     z=(z*z)+c
-    cm=(abs(z)<2)
+    cm=(abs(z)<top)
     subplot(3,3,j)
     title(i)
     axis('off')
-    imshow(cm)
+    imshow(cm, cmap='gray')
 
 zs=zeros([M,M])
 for i in range(0,90):
     zs=(zs*zs)+c
-    k=(abs(zs)<2)
+    #zs=array([2 for m in range(M) for n in range(M) if abs(zs[m,n])>2])
+    '''for j in range(M):
+        for n in range(M):
+            if abs(zs[j,n])>top:
+                zs[j,n]=2
+                '''
+    k=(abs(zs)<top)
     cmsuma=cmsuma+k
 
 figure(1)
 axis('off')
-imshow(cmsuma)
+imshow(cmsuma, cmap='prism')
 '''
 figure()
 imshow(abs(c)+angle(c))
