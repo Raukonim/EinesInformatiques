@@ -7,6 +7,13 @@ Created on Mon Nov 09 10:48:45 2015
 
 from __future__ import division
 from pylab import*
+import time
+import os
+
+
+
+start_time = time.time()
+
 
 interactive(True)
 close('all')
@@ -21,6 +28,7 @@ c=X+1j*Y
 
 cm=double(zeros([M,M]))
 cmsuma=double(zeros([M,M]))
+gif=double(zeros([M,M,90]))
 figure(0)
 j=0
 for i in range(0,90,10):
@@ -36,14 +44,13 @@ for i in range(0,90,10):
 zs=zeros([M,M])
 for i in range(0,90):
     zs=(zs*zs)+c
-    #zs=array([2 for m in range(M) for n in range(M) if abs(zs[m,n])>2])
-    '''for j in range(M):
-        for n in range(M):
-            if abs(zs[j,n])>top:
-                zs[j,n]=2
-                '''
+    #zs=nan_to_num(zs)
+    zs[abs(zs)>top]=top
     k=(abs(zs)<top)
     cmsuma=cmsuma+k
+    imsave("cmsuma"+str(i)+".png", cmsuma, cmap="prism")
+
+os.system("IMconvert -delay 20 -loop 0 *png mandelbrot.gif")
 
 figure(1)
 axis('off')
@@ -52,3 +59,6 @@ imshow(cmsuma, cmap='prism')
 figure()
 imshow(abs(c)+angle(c))
 '''
+#writeGif()
+time=time.time()-start_time
+print "runing time ="+str(time)
