@@ -10,8 +10,6 @@ from pylab import *
 import time
 import os
 
-
-
 start_time = time.time()
 
 
