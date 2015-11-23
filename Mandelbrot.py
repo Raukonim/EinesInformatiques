@@ -28,44 +28,38 @@ c=X+1j*Y
 
 cm=double(zeros([M,M]))
 cmsuma=double(zeros([M,M]))
-gif=double(zeros([M,M,90]))
 figure(0)
 j=0
-for i in range(0,90,10):
-    j=1+i/10
-    #print j
-    z=(z*z)+c
-    cm=(abs(z)<top)
-    subplot(3,3,j)
-    title(i)
-    axis('off')
-    imshow(cm, cmap='gray')
-
 
 zs=zeros([M,M])
-ims=[]
 for i in range(0,90):
     zs=(zs*zs)+c
     #zs=nan_to_num(zs)
     zs[abs(zs)>top]=top
     k=(abs(zs)<top)
     cmsuma=cmsuma+k
-    ims.append(cmsuma)
-    if len(str(i))==1:
+    if i%10==0:
+            j=1+i/10
+            #print j
+            z=(z*z)+c
+            cm=(abs(z)<top)
+            subplot(3,3,j)
+            title(i)
+            axis('off')
+            imshow(cm, cmap='gray')
+    '''if len(str(i))==1:
         h='0'+str(i)
     else:
         h=str(i)
     imsave('cmsuma'+h+'.png', cmsuma, cmap='prism')
-# follow:http://docs.wand-py.org/en/0.4.1/guide/install.html#install-imagemagick-on-windows
-#os.system("IMconvert -delay 20 -loop 0 *png mandelbrot.gif")
 
 os.system('convert.im6 -delay 50 -loop 0 *.png mandelbrot.gif')
-os.system('rm *.png')
+os.system('rm *.png')'''
 
 figure(1)
 axis('off')
 imshow(cmsuma, cmap='prism')
-imsave('mandelbrot90.png', cmsuma, cmap='prism')
+#imsave('mandelbrot90.png', cmsuma, cmap='prism')
 '''
 figure()
 imshow(abs(c)+angle(c))
