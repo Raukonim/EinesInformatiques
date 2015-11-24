@@ -49,7 +49,34 @@ xlabel('temps')
 ylabel('Theta')
 plot(t,y[:,1])
 
+def central(x,t):
+    """
+    x[0]=velocitat x
+    x[1]=posicio x
+    
+    x[2]=velocitat y
+    x[3]=posició y
+    """
+    G=6.67408*10**(-11)
+    M=5.97219*10**24
+    m=0.07342*10**24
+    
+    return (-G*M*m*x[1]/((x[1]*x[1]+x[3]*x[3])**(3/2))), x[0],(-G*M*m*x[3]/((x[1]*x[1]+x[3]*x[3])**(3/2))), x[2]
 
+def gradient(x,t):
+    
+    return [[t,0,t,0],[0,1,0,1]]
+
+t=arange(0,365*24*60*60)
+
+x0_0=0
+x1_0=400000000
+y0_0=29000000
+y1_0=0
+
+x0=[x0_0,x1_0,y0_0,y1_0]
+
+x=odeint(central, x0, t, Dfun=gradient)
 
 time=time.time()-start_time
 print "runing time ="+str(time)
