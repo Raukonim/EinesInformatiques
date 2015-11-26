@@ -5,7 +5,7 @@ Created on Thu Nov 19 09:43:19 2015
 @author: albert
 """
 
-from __future__ import division
+from __future__ import division, print_function
 from pylab import*
 from scipy.integrate import odeint
 import time
@@ -58,25 +58,54 @@ def central(x,t):
     x[3]=posició y
     """
     G=6.67408*10**(-11)
-    M=5.97219*10**24
-    m=0.07342*10**24
+    M=6*10**24
+    m=419450
     
-    return (-G*M*m*x[1]/((x[1]*x[1]+x[3]*x[3])**(3/2))), x[0],(-G*M*m*x[3]/((x[1]*x[1]+x[3]*x[3])**(3/2))), x[2]
+    return (-G*M*x[1]/((x[1]**2+x[3]**2)**(3/2))), x[0],(-G*M*x[3]/((x[1]**2+x[3]**2)**(3/2))), x[2]
 
-def gradient(x,t):
-    
-    return [[t,0,t,0],[0,1,0,1]]
+orb=100*60
+t=linspace(0,orb,orb*1000)
 
-t=arange(0,365*24*60*60)
+vx_0=7660
+x_0=0        
+vy_0=0
+y_0=412500+6400000
 
-x0_0=0
-x1_0=400000000
-y0_0=29000000
-y1_0=0
+x0=[vx_0,x_0,vy_0,y_0]
 
-x0=[x0_0,x1_0,y0_0,y1_0]
+x=odeint(central, x0, t)#, Dfun=gradient)
 
-x=odeint(central, x0, t, Dfun=gradient)
+figure()
+#subplot(5,1,1)
+title("Forces Centrals")
+xlabel('temps')
+ylabel('x')
+plot(t,x[:,1])
+
+figure()
+#subplot(5,1,2)
+xlabel('temps')
+ylabel('y')
+plot(t,x[:,3])
+
+figure()
+#subplot(5,1,3)
+xlabel('temps')
+ylabel('vx')
+plot(t,x[:,0])
+
+figure()
+#subplot(5,1,4)
+xlabel('temps')
+ylabel('vy')
+plot(t,x[:,2])
+
+figure()
+#subplot(5,1,5)
+xlabel('x')
+ylabel('y')
+plot(x[:,1],x[:,3])
+axis([-8000000, 8000000, -8000000, 8000000])
 
 time=time.time()-start_time
-print "runing time ="+str(time)
+print("runing time ="+str(time))
