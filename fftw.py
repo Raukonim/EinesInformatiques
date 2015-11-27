@@ -17,11 +17,7 @@ start_time = time.time()
 interactive(True)
 close('All')
 
-N,audio=read('cello.wav')
-l=audio.shape
-L=l[0]
-x=uint16(linspace(-N/(2*L),N/(2*L)))
-
+#%% Quadrat i Serra
 t =linspace(0, 1, 500)
 f =linspace(-250,250,500)
 quadrat=square(2*pi*5*t)
@@ -62,3 +58,20 @@ xlim(0,20)
 xlabel("Hz")
 subplot(414)
 plot(t,real(filtSerra))
+
+#%% Audio
+N,audio=read('cello.wav')
+l=audio.shape
+L=l[0]
+x=linspace(-N/(2*1),N/(2*1),N)
+
+dades=audio[audio>0]
+dades=dades[:N]
+
+fftdades=fftshift(fft(dades))
+
+figure(3)
+subplot(211)
+plot(dades)
+subplot(212)
+plot(x, abs(fftdades))
