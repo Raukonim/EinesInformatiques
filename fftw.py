@@ -7,7 +7,6 @@ Created on Fri Nov 27 11:27:34 2015
 
 from __future__ import division, print_function
 from pylab import*
-from scipy.integrate import odeint
 from scipy.signal import square, sawtooth
 import time
 
@@ -27,14 +26,13 @@ t =linspace(0, 1, 500)
 f =linspace(-250,250,500)
 quadrat=square(2*pi*5*t)
 fftQuadrat=fftshift(fft(quadrat))
-pasBaixQ=f<50
-pasBaixQ=-50<pasBaixQ
+pasBaixQ=abs(f)<=7
 fftFiltQ=pasBaixQ*fftQuadrat
 filtQuadrat=ifft(fftFiltQ)
 
 serra=sawtooth(2*pi*5*t)
 fftSerra=fftshift(fft(serra))
-pasBaixS=-50<f
+pasBaixS=abs(f)<=6
 fftFiltS=pasBaixS*fftSerra
 filtSerra=ifft(fftFiltS)
 
@@ -46,9 +44,11 @@ ylim(0,1.2)
 subplot(412)
 plot(f, abs(fftQuadrat))
 subplot(413)
-plot(f, abs(fftFiltQ))
+plot(f[249:279], abs(fftFiltQ[249:279]))
+xlim(0,20)
+xlabel("Hz")
 subplot(414)
-plot(t,abs(filtQuadrat))
+plot(t,real(filtQuadrat))
 
 figure(2)
 subplot(411)
@@ -57,6 +57,8 @@ ylim(0,1.2)
 subplot(412)
 plot(f, abs(fftSerra))
 subplot(413)
-plot(f, abs(fftFiltS))
+plot(f[249:279], abs(fftFiltS[249:279]))
+xlim(0,20)
+xlabel("Hz")
 subplot(414)
-plot(t,abs(filtQuadrat))
+plot(t,real(filtSerra))
