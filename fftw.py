@@ -89,3 +89,6 @@ for i in range(9):
     else:
         h=str(i)
     savefig('sample'+h+'.png')
+
+'''os.system('convert.im6 -delay 50 -loop 0 *.png cello.gif')
+os.system('rm *.png')'''
