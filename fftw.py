@@ -80,7 +80,7 @@ interactive(False)
 
 for i in range(9):
     segon=fftshift(fft(audio[i*N:i*N+N]))
-    #Ñprint(i*N, i*N+N)
+    #print(i*N, i*N+N)
     figure()
     semilogy(x,abs(segon))
     xlim(-22500,22500)
