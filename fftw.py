@@ -24,13 +24,13 @@ quadrat=square(2*pi*5*t)
 fftQuadrat=fftshift(fft(quadrat))
 pasBaixQ=abs(f)<=7
 fftFiltQ=pasBaixQ*fftQuadrat
-filtQuadrat=ifft(fftFiltQ)
+filtQuadrat=ifft(fftshift(fftFiltQ))
 
 serra=sawtooth(2*pi*5*t)
 fftSerra=fftshift(fft(serra))
 pasBaixS=abs(f)<=6
 fftFiltS=pasBaixS*fftSerra
-filtSerra=ifft(fftFiltS)
+filtSerra=ifft(fftshift(fftFiltS))
 
 
 figure(1)
@@ -40,8 +40,8 @@ ylim(0,1.2)
 subplot(412)
 plot(f, abs(fftQuadrat))
 subplot(413)
-plot(f[249:279], abs(fftFiltQ[249:279]))
-xlim(0,20)
+plot(f, abs(fftFiltQ))
+#xlim(0,20)
 xlabel("Hz")
 subplot(414)
 plot(t,real(filtQuadrat))
@@ -53,20 +53,21 @@ ylim(0,1.2)
 subplot(412)
 plot(f, abs(fftSerra))
 subplot(413)
-plot(f[249:279], abs(fftFiltS[249:279]))
-xlim(0,20)
+plot(f, abs(fftFiltS))
+#xlim(0,20)
 xlabel("Hz")
 subplot(414)
 plot(t,real(filtSerra))
 
 #%% Audio
 N,audio=read('cello.wav')
-l=audio.shape
-L=l[0]
-x=linspace(-N/(2*1),N/(2*1),N)
+L=1
 
-dades=audio[audio>0]
-dades=dades[:N]
+
+audio=audio[audio!=0]
+mida=audio.shape
+dades=audio[:N]
+x=linspace(-N/(2*L),N/(2*L),N)
 
 fftdades=fftshift(fft(dades))
 
@@ -75,3 +76,16 @@ subplot(211)
 plot(dades)
 subplot(212)
 plot(x, abs(fftdades))
+interactive(False)
+
+for i in range(9):
+    segon=fftshift(fft(audio[i*N:i*N+N]))
+    #Ñprint(i*N, i*N+N)
+    figure()
+    semilogy(x,abs(segon))
+    xlim(-22500,22500)
+    if len(str(i))==1:
+        h='0'+str(i)
+    else:
+        h=str(i)
+    savefig('sample'+h+'.png')
