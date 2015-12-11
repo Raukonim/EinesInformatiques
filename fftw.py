@@ -9,6 +9,7 @@ from __future__ import division, print_function
 from pylab import*
 from scipy.signal import square, sawtooth
 import time
+import os
 
 from scipy.io.wavfile import read, write
 
@@ -39,6 +40,7 @@ plot(t, quadrat)
 ylim(0,1.2)
 subplot(412)
 plot(f, abs(fftQuadrat))
+xlim(-50,50)
 subplot(413)
 plot(f, abs(fftFiltQ))
 #xlim(0,20)
@@ -67,28 +69,55 @@ L=1
 audio=audio[audio!=0]
 mida=audio.shape
 dades=audio[:N]
-x=linspace(-N/(2*L),N/(2*L),N)
-
-fftdades=fftshift(fft(dades))
+x=linspace(-N/(2*L),N/(2*L))
+fftDades=fftshift(fft(dades))
 
 figure(3)
 subplot(211)
 plot(dades)
 subplot(212)
-plot(x, abs(fftdades))
+plot(x, abs(fftDades))
 interactive(False)
 
 for i in range(9):
     segon=fftshift(fft(audio[i*N:i*N+N]))
     #print(i*N, i*N+N)
     figure()
-    semilogy(x,abs(segon))
-    xlim(-22500,22500)
+    title('t_0=0,'+str(i))
+    plot(x,abs(segon))
+    xlim(-600,600)
+    ylim(1,10**9)
     if len(str(i))==1:
         h='0'+str(i)
     else:
         h=str(i)
     savefig('sample'+h+'.png')
 
-'''os.system('convert.im6 -delay 50 -loop 0 *.png cello.gif')
-os.system('rm *.png')'''
+interactive(True)
+os.system('convert.im6 -delay 25 -loop 0 *.png cello.gif')
+os.system('rm *.png')
+
+freqTall=1100
+pasBaixD=abs(x)<=freqTall
+fftFiltD=pasBaixD*fftDades
+filtDades=ifft(fftshift(fftFiltD))
+
+figure()
+subplot(411)
+plot(dades)
+xlim(0, N)
+subplot(412)
+plot(x, abs(fftDades))
+#xlim(-N/2, N/2)
+xlim(-(1.5*freqTall), 1.5*freqTall)
+subplot(413)
+plot(x, abs(fftFiltD))
+xlim(-(1.5*freqTall), 1.5*freqTall)
+subplot(414)
+plot(real(filtDades))
+xlim(0, N)
+
+write('cellofilt.wav', N, real(filtDades))
+
+time=time.time()-start_time
+print("runing time ="+str(time))
