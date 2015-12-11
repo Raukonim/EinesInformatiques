@@ -36,9 +36,9 @@ def rgb(long_ona,x,y,z,espectre):
     
     xxyyzz=[xx,yy,zz]
     
-    canvi=[[3.240479,-1.537150,-0.498535],
-           [-0.969256,1.875992,0.041556],
-           [0.055648,-0.204043,1.057311]]
+    canvi=array([[3.240479,-1.537150,-0.498535],
+                [-0.969256,1.875992,0.041556],
+                [0.055648,-0.204043,1.057311]])
     
     CIE=[xx,yy,zz]
     
@@ -47,7 +47,7 @@ def rgb(long_ona,x,y,z,espectre):
     b=uint8(255*dot(canvi[2],CIE))
         
     N=256
-    cl=ones([N,N,3])
+    cl=ones([N,N,3], dtype='uint8')
     cl[:,:,0]*=r
     cl[:,:,1]*=g
     cl[:,:,2]*=b
@@ -76,13 +76,14 @@ plot(long_ona, y, label='y')
 plot(long_ona, z, label='z')
 xlim(380,650)
 ylim(0,2)
+grid('on')
 legend()
 
 subplot(212)
 plot(long_ona, espectre)
 xlim(380,650)
 ylim(0,2)
-
+grid('on')
 
 figure('Color:'+str(cl_espectre[0]))
 imshow(cl_espectre[1])
