@@ -64,21 +64,35 @@ plot(t,real(filtSerra))
 #%% Audio
 N,audio=read('cello.wav')
 L=1
-
+freqFilt=500
 
 audio=audio[audio!=0]
 mida=audio.shape
 dades=audio[:N]
-x=linspace(-N/(2*L),N/(2*L))
+x=linspace(-N/(2*L),N/(2*L), num=N)
 fftDades=fftshift(fft(dades))
 
-figure(3)
-subplot(211)
-plot(dades)
-subplot(212)
-plot(x, abs(fftDades))
-interactive(False)
 
+pasBaixD=abs(x)<=freqFilt
+fftFiltD=pasBaixD*fftDades
+filtDades=ifft(fftshift(fftFiltD))
+
+figure()
+subplot(411)
+plot(dades)
+xlim(0, N/20)
+subplot(412)
+plot(x, abs(fftDades))
+xlim(-(1.5*freqFilt), 1.5*freqFilt)
+subplot(413)
+plot(x, abs(fftFiltD))
+xlim(-(1.5*freqFilt), 1.5*freqFilt)
+subplot(414)
+plot(real(filtDades))
+xlim(0,N/20)
+
+'''
+interactive(False)
 for i in range(9):
     segon=fftshift(fft(audio[i*N:i*N+N]))
     #print(i*N, i*N+N)
@@ -96,28 +110,9 @@ for i in range(9):
 interactive(True)
 os.system('convert.im6 -delay 25 -loop 0 *.png cello.gif')
 os.system('rm *.png')
+'''
 
-freqTall=1100
-pasBaixD=abs(x)<=freqTall
-fftFiltD=pasBaixD*fftDades
-filtDades=ifft(fftshift(fftFiltD))
-
-figure()
-subplot(411)
-plot(dades)
-xlim(0, N)
-subplot(412)
-plot(x, abs(fftDades))
-#xlim(-N/2, N/2)
-xlim(-(1.5*freqTall), 1.5*freqTall)
-subplot(413)
-plot(x, abs(fftFiltD))
-xlim(-(1.5*freqTall), 1.5*freqTall)
-subplot(414)
-plot(real(filtDades))
-xlim(0, N)
-
-write('cellofilt.wav', N, real(filtDades))
+#write('cellofilt.wav', N, real(filtDades))
 
 time=time.time()-start_time
 print("runing time ="+str(time))
